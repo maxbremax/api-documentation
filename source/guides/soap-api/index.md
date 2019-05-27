@@ -1,6 +1,6 @@
 # SOAP API Introduction
 
-Our SOAP API was created back in 2009, making it our oldest API. It was initially made to integrate with Navision, and was part of the "Navision Module" in Centra before we renamed it to "SOAP API". Over the years it has become quite stable. Many of our clients depend on it and have done so for many years.
+Our SOAP API was created back in 2009, making it our oldest API. It was initially made to integrate with Navision, and was part of the "Navision Module" in Centra before we renamed it to "SOAP API".
 
 This link contains all operations and XML structures of the API, made from the WSDL definition:
 [https://docs.centra.com/soap/index.php](https://docs.centra.com/soap/index.php)
@@ -12,13 +12,13 @@ IDs and the ID conversion table is a fundamental part of this API.
 
 The ids are always in the `<id>` tag on the XML, and are used to uniquely identify orders, products, customers and other data objects.
 
-The ID conversion table translates back and forth between Centra's internal database IDs and IDs you chose on your side.
+The ID conversion table translates back and forth between Centra's internal database IDs, and IDs you chose on your side.
 
-When data originates from Centra, for example orders, you will always get Centra's internal numeric ID. For orders this is the order number.
+When data originates from Centra, for example orders, you will always get Centra's internal numeric ID. This is the order number for orders.
 
-When data originates from your side, for example products, you can pick any unique `<id>` you prefer when you send the data to Centra. This is when the ID conversion table comes into effect: Centra will create a mapping from your ID to Centra's internal numeric ID in the conversion table, and all data you see in the API will always use the ID you picked.
+When data originates from your side, for example in your products, you can pick any unique `<id>` you prefer when you send the data to Centra. This is when the ID conversion table comes into effect: Centra will create a mapping from your ID to Centra's internal numeric ID in the conversion table, and all data you see in the API will always use the ID you picked.
 
-For example, you create a product with `<id>yourProductId</id>`. After that you can update the product using that ID, and when you get an order from Centra containing that product, the XML data uses yourProductId for the product.
+For example, first you create a product with `<id>yourProductId</id>`. Once the product is created, you can update the product using that ID, and when you get an order from Centra containing that product, the XML data uses yourProductId for the product.
 
 You can view and edit the conversion table in the Centra admin.
 
@@ -45,11 +45,11 @@ Events are fetched using:
 
 Events are removed from the queue with events_Done [https://docs.centra.com/soap/index.php?op=events_Done](https://docs.centra.com/soap/index.php?op=events_Done)
 
-You need to use events_Done on all events, even if they are of an unknown type that you don't handle. The API returns the oldest events, up to a 100 in each events_Get. If you do not use events_Done on all events, after a while all 100 events will be old ones and you will never see any new events.
+You need to use events_Done on all events, even if they are of an unknown type that you don't handle. The API returns the oldest events, up to a 100 in each events_Get. If you do not use events_Done on all events, all 100 events on display will be old and you will never see any new events.
 
-For example, if there are 234 events in the queue, events_Get will return the oldest 100. When you mark 10 of those as done with events_Done, they are removed from the queue. After that the queue will contain 224 events, events_Get will give you the 100 oldest again. This time 90 of those will be the same as the last time, 10 will be new.
+For example; if there are 234 events in the queue, events_Get will return the oldest 100. When you mark 10 of those as done with events_Done, they are removed from the queue. After that the queue will contain 224 events, events_Get will give you the 100 oldest again. This time 90 of those will be the same as the last time, 10 will be new.
 
-The data for each event depends on the type of the event. Events of type "order" contain an order. The structure is the same as  for the corresponding "update" operation for that type of data. An order event contains the data structure from orders_Update [https://docs.centra.com/soap/index.php?op=orders_Update](https://docs.centra.com/soap/index.php?op=orders_Update) .
+The data for each event depends on the type of the event. Events of type "order" contain an order. The structure is the same as for the corresponding "update" operation for that type of data. An order event contains the data structure from orders_Update [https://docs.centra.com/soap/index.php?op=orders_Update](https://docs.centra.com/soap/index.php?op=orders_Update) .
 
 Each event contains the complete data for the thing that has changed. It does not contain any information about what has changed, you would need to compare it yourself to the data on your side to know that. This is a problem. Usually, this is solved by making rules for when the data is owned by one sytem or the other. For example, an order is owned by Centra until its imported into your system. From that point on, only your system can make changes to the order.
 
@@ -93,9 +93,9 @@ All updates return the same type of response. `<success>` can be `true` or `fals
 
 ## API Versions
 
-We have only one API version. We never change any existing fields in the specification, but we sometimes add new fields. Please make sure the implementation you build does not break if new fields are added to the XML.
+There is only one API version. We never change any existing fields in the specification, but we do add new fields when needed. Please make sure the implementation you build does not break if new fields are added to the XML.
 
-But we do have 3 different endpoints.
+However, we do have 3 different endpoints.
 
 If you are building a new integration, use the "SOAP API" endpoint. It looks something like this: https://example.centra.com/ams/system/service/module/soap/api?wsdl
 
@@ -104,7 +104,7 @@ All examples in this documentation uses the "SOAP API" endpoint.
 If you are working on an older integration, it might use one of the two "navision" endpoints. They look like this: 
 https://example.centra.com/ams/system/service/module/navision/api?wsdl or https://example.centra.com/ams/system/service/module/navision/soap?wsdl
 
-The older "navision" endpoints use a different XML namespace name, and one has a different way to send the login username and password. Other than that they are identical. These links contains all operations and XML structures of the older endpoints, made from the WSDL definition:
+The older "navision" endpoints use a different XML namespace name, and one has a different way to send the login username and password. Other than that they are identical. These links contain all operations and XML structures of the older endpoints, made from the WSDL definition:
 
 - [https://docs.centra.com/silksoap/index.php](https://docs.centra.com/silksoap/index.php)
 - [https://docs.centra.com/silkxml/index.php](https://docs.centra.com/silkxml/index.php)
